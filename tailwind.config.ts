@@ -8,7 +8,13 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  theme: {},
+  theme: {
+    extend: {
+      screens: {
+        xs: "400px",
+      },
+    },
+  },
   plugins: [require("@tailwindcss/typography")],
 };
 export default config;

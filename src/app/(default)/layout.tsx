@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { LunchProvider } from "../../config/lunch-provider";
 
 type Props = {
   children: ReactNode;
@@ -6,9 +7,9 @@ type Props = {
 
 const IndexLayout = ({ children }: Props) => {
   return (
-    <div className="w-full h-dvh bg-gray-800">
+    <div className="w-full min-h-dvh bg-gray-800">
       <div className="w-full flex justify-center">
-        <div className="max-w-[600px] min-w-[350px]">
+        <div className="max-w-[600px] min-w-[350px] w-[600px] px-6 pb-10">
           {/* 타이틀 */}
           <div className="flex justify-center my-10">
             <p className="font-medium text-white text-2xl shadow-md">
@@ -17,8 +18,8 @@ const IndexLayout = ({ children }: Props) => {
           </div>
 
           {/* 콘텐츠 */}
-          <div className="w-full min-h-[82dvh] p-4 rounded-xl bg-white">
-            {children}
+          <div className="w-full min-h-[82dvh] rounded-xl bg-white relative">
+            <LunchProvider>{children}</LunchProvider>
           </div>
         </div>
       </div>
