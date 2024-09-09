@@ -23,7 +23,6 @@ const getLunchGroup = (
   }, {});
 
   const tempInUser: string[] = [];
-  const finalGroup = [];
   Object.keys(teamGroupBy).forEach((key) => {
     if (teamGroupBy[key].length > groupList.length) {
       // 예정
@@ -49,9 +48,9 @@ const getLunchGroup = (
   return groupList;
 };
 
-const getRandomNum = (rangeNum: number) => {
-  return Math.ceil(Math.random() * rangeNum);
-};
+// const getRandomNum = (rangeNum: number) => {
+//   return Math.ceil(Math.random() * rangeNum);
+// };
 
 const getShuffleArray = (array: UserType[] | UserType[][]) => {
   array.sort(() => Math.random() - 0.5);
