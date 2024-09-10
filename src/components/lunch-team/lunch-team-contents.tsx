@@ -9,7 +9,7 @@ const LunchTeamContents = () => {
   } = useLunchContext();
 
   return (
-    <div className="grid xs:grid-cols-2 grid-cols-1 gap-2">
+    <div className="grid sm:grid-cols-2 grid-cols-1 gap-2">
       {getLunchGroup(userList, 4).map((groupList, groupIdx) => (
         <div
           key={groupIdx}
@@ -17,13 +17,9 @@ const LunchTeamContents = () => {
         >
           <p className="mb-4 text-xl font-bold">{groupIdx + 1}조</p>
           <div className="w-full grid grid-cols-2 gap-2">
-            {groupList.map((user) => (
-              <div key={user.name} className="text-center">
-                <span>
-                  {user.team}
-                  {user.name}
-                  {user.check ? 1 : 2}
-                </span>
+            {groupList.map((user, idx) => (
+              <div key={idx} className="text-center">
+                <span>{`${user.team} ${user.name}`}</span>
               </div>
             ))}
           </div>

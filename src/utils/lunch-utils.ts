@@ -1,56 +1,65 @@
 import { UserType } from "../config/lunch-provider";
 
-export // 그룹화 함수 (화살표 함수 사용)
-const getLunchGroup = (
+export const getLunchGroup = (
   userList: UserType[],
   maxGroupSize: number,
 ): UserType[][] => {
   const groupList = new Array(Math.ceil(userList.length / maxGroupSize));
   const chkUser = userList.filter((user) => user.check);
-  const unChkUser = userList.filter((user) => user.check === false);
+  const unChkUser = userList.filter((user) => !user.check);
 
   for (let i = 0; i < groupList.length; i++) groupList[i] = [];
 
+  // 배열 셋팅
   chkUser.forEach(
     (user, idx) => (groupList[idx] = [...(groupList[idx] || []), user]),
   );
   getShuffleArray(groupList);
 
-  const teamGroupBy = unChkUser.reduce((acc, item) => {
-    if (!acc[item.team]) acc[item.team] = [];
-    acc[item.team].push(item);
-    return acc;
-  }, {});
+  // 팀 인원 정렬
+  const teamGroupBy = getCustomGroup(unChkUser);
 
-  const tempInUser: string[] = [];
+  const resultList: UserType[][] = [];
   Object.keys(teamGroupBy).forEach((key) => {
-    if (teamGroupBy[key].length > groupList.length) {
-      // 예정
-    } else {
-      for (let i = teamGroupBy[key].length; i > 0; i--) {
-        let tempIndex = i;
-        while (!tempInUser.includes(teamGroupBy[key][i - 1].name)) {
-          if (groupList.at(tempIndex)?.length < maxGroupSize) {
-            groupList.at(tempIndex).push(teamGroupBy[key][i - 1]);
-            tempInUser.push(teamGroupBy[key][i - 1].name);
-          } else {
-            tempIndex--;
-          }
-        }
-        getShuffleArray(groupList);
+    for (let i = teamGroupBy[key].length - 1; i >= 0; i--) {
+      const currentIndex = i * -1;
+      groupList.at(currentIndex)?.push(teamGroupBy[key][i]);
+
+      if (groupList.at(currentIndex)?.length >= 4) {
+        resultList.push(groupList.at(currentIndex));
+
+        const idx = groupList.indexOf(groupList.at(currentIndex));
+        groupList.splice(idx, 1);
       }
     }
+
+    getShuffleArray(groupList);
   });
 
-  console.log(teamGroupBy);
-  console.log(groupList);
+  resultList.push(groupList[0]);
+  groupList.splice(0, 1);
 
-  return groupList;
+  return resultList;
 };
 
-// const getRandomNum = (rangeNum: number) => {
-//   return Math.ceil(Math.random() * rangeNum);
-// };
+const getCustomGroup = (group: UserType[]) => {
+  const groupObject: { [key: string]: UserType[] } = group.reduce(
+    (acc, item) => {
+      if (!acc[item.team]) acc[item.team] = [];
+      acc[item.team].push(item);
+      return acc;
+    },
+    {},
+  );
+
+  // 객체를 배열로 변환하고 배열 길이로 내림차순 정렬
+  const sortedEntries = Object.entries(groupObject).sort(
+    (a, b) => b[1].length - a[1].length,
+  );
+
+  // 다시 객체로 변환
+  return Object.fromEntries(sortedEntries);
+};
 
 const getShuffleArray = (array: UserType[] | UserType[][]) => {
   array.sort(() => Math.random() - 0.5);
