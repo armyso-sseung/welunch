@@ -22,7 +22,9 @@ export const getLunchGroup = (
   const resultList: UserType[][] = [];
   Object.keys(teamGroupBy).forEach((key) => {
     for (let i = teamGroupBy[key].length - 1; i >= 0; i--) {
-      const currentIndex = i * -1;
+      if (groupList.length - 1 < i) getShuffleArray(groupList);
+
+      const currentIndex = groupList.length - 1 < i ? groupList.length - 1 : i;
       groupList.at(currentIndex)?.push(teamGroupBy[key][i]);
 
       if (groupList.at(currentIndex)?.length >= 4) {
