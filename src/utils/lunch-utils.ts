@@ -41,7 +41,7 @@ export const getLunchGroup = (
   resultList.push(groupList[0]);
   groupList.splice(0, 1);
 
-  return resultList;
+  return resultList.filter((ele) => ele?.length);
 };
 
 const getCustomGroup = (group: UserType[]) => {

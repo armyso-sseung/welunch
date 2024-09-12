@@ -17,8 +17,8 @@ const LunchTeamContents = () => {
         >
           <p className="mb-4 text-xl font-bold">{groupIdx + 1}조</p>
           <div className="w-full grid grid-cols-2 gap-2">
-            {groupList.map((user, idx) => (
-              <div key={idx} className="text-center">
+            {groupList?.map((user, idx) => (
+              <div key={idx} className="text-center text-[11pt]">
                 <span>{`${user.team} ${user.name}`}</span>
               </div>
             ))}
