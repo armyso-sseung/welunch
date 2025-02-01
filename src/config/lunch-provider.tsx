@@ -24,11 +24,21 @@ type LunchContextType = {
   data: {
     teamList: string[];
     userList: UserType[];
+    groupList: UserType[][];
+    report: ReportType;
   };
   method: {
     setTeamList: Dispatch<SetStateAction<string[]>>;
     setUserList: Dispatch<SetStateAction<UserType[]>>;
+    setGroupList: Dispatch<SetStateAction<UserType[][]>>;
+    setReport: Dispatch<SetStateAction<ReportType>>;
   };
+};
+
+type ReportType = {
+  totalSpecial: number;
+  specialConflicts: number;
+  teamConflicts: number;
 };
 
 const LunchContext = createContext<LunchContextType>({} as LunchContextType);
@@ -37,19 +47,29 @@ const LunchContext = createContext<LunchContextType>({} as LunchContextType);
 export const LunchProvider = ({ children }: Props) => {
   const [teamList, setTeamList] = useState<string[]>([]);
   const [userList, setUserList] = useState<UserType[]>([]);
+  const [groupList, setGroupList] = useState<UserType[][]>([]);
+  const [report, setReport] = useState<ReportType>({
+    totalSpecial: 0,
+    specialConflicts: 0,
+    teamConflicts: 0,
+  });
 
   const value = useMemo(
     () => ({
       data: {
         teamList,
         userList,
+        groupList,
+        report,
       },
       method: {
         setTeamList,
         setUserList,
+        setGroupList,
+        setReport,
       },
     }),
-    [teamList, userList],
+    [groupList, report, teamList, userList],
   );
 
   return (

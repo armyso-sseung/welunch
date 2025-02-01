@@ -1,13 +1,15 @@
 import { ReactNode } from "react";
 
 type Props = {
-  children: ReactNode;
+  title: string;
+  children?: ReactNode;
 };
 
-const CommonTitle = ({ children }: Props) => {
+const CommonTitle = ({ children, title }: Props) => {
   return (
-    <div className="mb-3 py-2 border-gray-500 border-b-2">
-      <p className="text-lg font-medium">{children}</p>
+    <div className="mb-3 py-2 border-gray-500 border-b-2 flex justify-between items-center">
+      <p className="text-lg font-medium">{title}</p>
+      {children}
     </div>
   );
 };
