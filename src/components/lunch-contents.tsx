@@ -52,7 +52,7 @@ const LunchContents = () => {
       {!isComplete ? (
         <div className="absolute bottom-0 w-full px-2 pb-8 flex justify-center">
           <div
-            className={`w-1/4 h-[55px] rounded-full border flex justify-center items-center px-3 shadow-md ${isNext ? "bg-green-400 text-white cursor-pointer hover:opacity-85" : "bg-gray-300 text-gray-500 pointer-events-none"}`}
+            className={`w-1/4 min-w-[150px] h-[55px] rounded-full border flex justify-center items-center px-3 shadow-md ${isNext ? "bg-green-400 text-white cursor-pointer hover:opacity-85" : "bg-gray-300 text-gray-500 pointer-events-none"}`}
             onClick={() => setIsOpen(true)}
           >
             <span className="flex-1 flex justify-center font-bold text-xl">
@@ -66,7 +66,7 @@ const LunchContents = () => {
       ) : (
         <div className="absolute bottom-0 w-full px-2 pb-8 flex justify-center">
           <div
-            className="w-1/4 h-[55px] rounded-full border flex justify-center items-center px-3 shadow-md bg-green-400 text-white cursor-pointer hover:opacity-85"
+            className="w-1/4 min-w-[150px] h-[55px] rounded-full border flex justify-center items-center px-3 shadow-md bg-green-400 text-white cursor-pointer hover:opacity-85"
             onClick={() => setIsComplete(false)}
           >
             <span>
