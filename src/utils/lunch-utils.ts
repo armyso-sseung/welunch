@@ -68,7 +68,7 @@ export const validGroup = (userList: UserType[], groupList: UserType[][]) => {
     teamConflicts: 0,
   };
 
-  groupList.forEach((group, idx) => {
+  groupList.forEach((group) => {
     // VIP 중복확인
     const specialCount = group.filter((user) => user.check).length;
     if (specialCount > 1) report.specialConflicts++;
