@@ -30,7 +30,9 @@ const LunchUserAdd = () => {
   return (
     <CommonSection>
       {/* 타이틀 */}
-      <CommonTitle>{LUNCH_USER.USER.TITLE}</CommonTitle>
+      <CommonTitle title={LUNCH_USER.USER.TITLE}>
+        <span className="text-sm">{userList.length} 명</span>
+      </CommonTitle>
 
       {/* 목록 */}
       {teamList.length > 0 ? (

@@ -42,7 +42,7 @@ const LunchUserTeam = () => {
   return (
     <CommonSection className="min-h-[150px]">
       {/* 타이틀 */}
-      <CommonTitle>{LUNCH_USER.TEAM.TITLE}</CommonTitle>
+      <CommonTitle title={LUNCH_USER.TEAM.TITLE} />
 
       {/* 입력 */}
       {isEdit ? (

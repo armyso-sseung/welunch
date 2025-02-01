@@ -1,68 +1,82 @@
 import { UserType } from "../config/lunch-provider";
 
-export const getLunchGroup = (
-  userList: UserType[],
-  maxGroupSize: number,
-): UserType[][] => {
-  const groupList = new Array(Math.ceil(userList.length / maxGroupSize));
-  const chkUser = userList.filter((user) => user.check);
-  const unChkUser = userList.filter((user) => !user.check);
+// 그룹 생성
+export const generateStrictGroups = (
+  userList?: UserType[],
+  maxGroupSize?: number,
+) => {
+  // 초기값
+  userList = userList ?? [];
+  maxGroupSize = maxGroupSize ?? 4;
 
-  for (let i = 0; i < groupList.length; i++) groupList[i] = [];
+  // VIP, 일반 정의
+  const specials = userList.filter((user) => user.check);
+  const normals = userList.filter((user) => !user.check);
+  const totalGroups = Math.ceil(userList.length / maxGroupSize);
 
-  // 배열 셋팅
-  chkUser.forEach(
-    (user, idx) => (groupList[idx] = [...(groupList[idx] || []), user]),
-  );
-  getShuffleArray(groupList);
+  // VIP 인원 제한 검증
+  if (specials.length > totalGroups) {
+    return alert("VIP 인원의 수가 조 수를 초과하였습니다.");
+  }
 
-  // 팀 인원 정렬
-  const teamGroupBy = getCustomGroup(unChkUser);
+  // VIP 선 배치
+  const groups = specials.map((vip) => [vip]);
 
-  const resultList: UserType[][] = [];
-  Object.keys(teamGroupBy).forEach((key) => {
-    for (let i = teamGroupBy[key].length - 1; i >= 0; i--) {
-      if (groupList.length - 1 < i) getShuffleArray(groupList);
+  // 전체 조 생성
+  while (groups.length < totalGroups) {
+    groups.push([]);
+  }
 
-      const currentIndex = groupList.length - 1 < i ? groupList.length - 1 : i;
-      groupList.at(currentIndex)?.push(teamGroupBy[key][i]);
+  // 사용자 랜덤 섞기 및 배치 시작
+  const shuffledNormals = [...normals].sort(() => Math.random() - 0.5);
+  shuffledNormals.forEach((user) => {
+    let bestGroup = [] as UserType[];
+    let minTeamConflict = Infinity;
 
-      if (groupList.at(currentIndex)?.length >= 4) {
-        resultList.push(groupList.at(currentIndex));
+    // 최적의 조 탐색
+    groups.forEach((group) => {
+      // 조 최대 인원 검증
+      if (group.length >= maxGroupSize) return;
 
-        const idx = groupList.indexOf(groupList.at(currentIndex));
-        groupList.splice(idx, 1);
+      // 같은팀 검증
+      const hasTeamConflict = group.some((m) => m.team === user.team);
+      const currentConflict = hasTeamConflict ? 1 : 0;
+
+      // 최적의 조 검증 ( 맨처음은 통과 그 다음부터는 최적의 탐색 )
+      if (currentConflict < minTeamConflict) {
+        // Group 참조 및 최적 카운트 처리
+        bestGroup = group;
+        minTeamConflict = currentConflict;
       }
-    }
+    });
 
-    getShuffleArray(groupList);
+    // 실제 Group 에 사용자 추가 ( 참조 )
+    bestGroup.push(user);
   });
 
-  resultList.push(groupList[0]);
-  groupList.splice(0, 1);
-
-  return resultList.filter((ele) => ele?.length);
+  groups.sort(() => Math.random() - 0.5);
+  groups.sort((x, y) => y.length - x.length);
+  return groups;
 };
 
-const getCustomGroup = (group: UserType[]) => {
-  const groupObject: { [key: string]: UserType[] } = group.reduce(
-    (acc, item) => {
-      if (!acc[item.team]) acc[item.team] = [];
-      acc[item.team].push(item);
-      return acc;
-    },
-    {},
-  );
+// 그룹 검증
+export const validGroup = (userList: UserType[], groupList: UserType[][]) => {
+  // Report 정의
+  const report = {
+    totalSpecial: userList.filter((user) => user.check).length,
+    specialConflicts: 0,
+    teamConflicts: 0,
+  };
 
-  // 객체를 배열로 변환하고 배열 길이로 내림차순 정렬
-  const sortedEntries = Object.entries(groupObject).sort(
-    (a, b) => b[1].length - a[1].length,
-  );
+  groupList.forEach((group, idx) => {
+    // VIP 중복확인
+    const specialCount = group.filter((user) => user.check).length;
+    if (specialCount > 1) report.specialConflicts++;
 
-  // 다시 객체로 변환
-  return Object.fromEntries(sortedEntries);
-};
+    // 팀 중복 확인
+    const teamList = new Set(group.map((user) => user.team));
+    report.teamConflicts += group.length - teamList.size;
+  });
 
-const getShuffleArray = (array: UserType[] | UserType[][]) => {
-  array.sort(() => Math.random() - 0.5);
+  return report;
 };
