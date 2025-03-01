@@ -1,0 +1,17 @@
+services:
+  hr-information-system:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: welunch
+    ports:
+      - "4504:4504"  # 노출할 포트
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    external: true
