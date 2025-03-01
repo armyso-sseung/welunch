@@ -32,7 +32,9 @@ const LunchUserAddInput = () => {
           <Select
             value={team}
             className="min-w-32"
-            options={teamList.map((team) => ({ label: team, value: team }))}
+            options={teamList
+              .sort()
+              .map((team) => ({ label: team, value: team }))}
             onChange={setTeam}
           />
           <Input
