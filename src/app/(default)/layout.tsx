@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 import { LunchProvider } from "../../config/lunch-provider";
+import Image from "next/image";
+import Link from "next/link";
 
 type Props = {
   children: ReactNode;
@@ -12,13 +14,13 @@ const IndexLayout = ({ children }: Props) => {
         <div className="max-w-[600px] min-w-[350px] w-[600px] px-6 pb-10">
           {/* 타이틀 */}
           <div className="flex justify-center my-10">
-            <p className="font-bold text-white text-2xl shadow-md">
-              같이 점심 먹을래?
-            </p>
+            <Link href="/">
+              <Image src="/img/logo.png" alt="logo" width={200} height={100} />
+            </Link>
           </div>
 
           {/* 콘텐츠 */}
-          <div className="w-full min-h-[82dvh] rounded-xl bg-white relative">
+          <div className="w-full min-h-[68dvh] rounded-xl bg-white relative">
             <LunchProvider>{children}</LunchProvider>
           </div>
         </div>
