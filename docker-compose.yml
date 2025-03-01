@@ -1,13 +1,11 @@
 services:
-  hr-information-system:
+  we-lunch:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: we-lunch
     ports:
       - "4504:4504"  # 노출할 포트
-    env_file:
-      - .env
     restart: unless-stopped
     networks:
       - app-network
